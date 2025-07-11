@@ -15,8 +15,12 @@
     cacheDirectory=".phpunit.cache"
     backupStaticProperties="false"
 >
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="GEMINI_API_KEY" value=""/>
+    </php>
     <testsuites>
-        <testsuite name="VendorName Test Suite">
+        <testsuite name="Alextravel Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
