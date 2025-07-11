@@ -11,28 +11,29 @@ use Parsedown;
 class GeminiTest extends TestCase
 {
     public GeminiService $geminiService;
+
     public Parsedown $parsedown;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->geminiService = app(GeminiService::class);
         $this->parsedown = app(Parsedown::class);
     }
 
-    public function testGemini()
+    public function test_gemini()
     {
         $candidates = Cache::get('testGemini');
-        if (!$candidates) {
+        if (! $candidates) {
             $response = $this->geminiService->prompt([
                 'contents' => [
                     [
-                        "role" => "user",
+                        'role' => 'user',
                         'parts' => [
-                            ['text' => 'Give me the tailwind classes for a well designed blue button']
-                        ]
-                    ]
-                ]
+                            ['text' => 'Give me the tailwind classes for a well designed blue button'],
+                        ],
+                    ],
+                ],
             ]);
             $candidates = $response->json('candidates');
             Cache::put('testGemini', $candidates);
@@ -40,7 +41,7 @@ class GeminiTest extends TestCase
         foreach ($candidates as $candidate) {
             foreach ($candidate['content']['parts'] as $part) {
                 $parsed = $this->parsedown->text($part['text']);
-                $doc = new DOMDocument();
+                $doc = new DOMDocument;
                 libxml_use_internal_errors(true);
                 $doc->loadHTML($parsed);
                 libxml_clear_errors();
@@ -48,7 +49,7 @@ class GeminiTest extends TestCase
                 $xpath = new DOMXPath($doc);
                 $codeNodes = $xpath->query('//code');
                 self::assertTrue($codeNodes->length > 0);
-                $codeDom = new DOMDocument();
+                $codeDom = new DOMDocument;
                 libxml_use_internal_errors(true);
                 $codeDom->loadHTML($codeNodes->item(0)->textContent);
                 $codeXpath = new DOMXPath($codeDom);

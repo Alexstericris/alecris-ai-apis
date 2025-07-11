@@ -2,7 +2,6 @@
 
 namespace Alexstericris\AlecrisAiApis\Services;
 
-use Alexstericris\AlecrisAiApis\QueueClient;
 use DOMDocument;
 use DOMXPath;
 use Parsedown;
@@ -19,18 +18,19 @@ class ApiResponseParser
     public function parseTailwindClass(string $text)
     {
         $parsed = $this->parsedown->text($text);
-        $doc = new DOMDocument();
+        $doc = new DOMDocument;
         libxml_use_internal_errors(true);
         $doc->loadHTML($parsed);
         libxml_clear_errors();
 
         $xpath = new DOMXPath($doc);
         $codeNodes = $xpath->query('//code');
-        $codeDom = new DOMDocument();
+        $codeDom = new DOMDocument;
         libxml_use_internal_errors(true);
         $codeDom->loadHTML($codeNodes->item(0)->textContent);
         $codeXpath = new DOMXPath($codeDom);
         $classElems = $codeXpath->query('//*[@class]');
+
         return $classElems->item(0)->getAttribute('class');
     }
 }
