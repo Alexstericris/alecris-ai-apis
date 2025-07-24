@@ -77,7 +77,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AlecrisAiApis"
+                "Alexstericris\\AlecrisAiApis\\AlecrisAiApis"
             ],
             "aliases": {
             }
